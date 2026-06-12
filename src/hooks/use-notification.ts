@@ -1,20 +1,19 @@
 'use client';
 
 import { useCallback } from 'react';
-import { Howl } from 'howler';
 import { useShallow } from 'zustand/react/shallow';
 import { useUiStore } from '@/stores/ui-store';
 
 type NotificationAction = { label: string; action: string };
 
-const alertSound =
-  typeof window !== 'undefined'
-    ? new Howl({
-        src: ['/sounds/alert.mp3'],
-        volume: 0.7,
-        html5: true,
-      })
-    : null;
+function playAlertSound() {
+  if (typeof window === 'undefined') return;
+  const audio = new Audio('/sounds/alert.mp3');
+  audio.volume = 0.7;
+  audio.play().catch(() => {
+    // Autoplay may be blocked — silently ignore
+  });
+}
 
 export function useNotification() {
   const { notificationPermission, setNotificationPermission } = useUiStore(
@@ -37,7 +36,7 @@ export function useNotification() {
 
   const notify = useCallback(
     (title: string, body: string, actions?: NotificationAction[]) => {
-      alertSound?.play();
+      playAlertSound();
 
       if (typeof window === 'undefined' || !('Notification' in window)) return;
 
