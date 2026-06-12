@@ -5,6 +5,7 @@ import { Timer, BarChart3 } from 'lucide-react';
 import { useUser, useClerk, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { SoundPopover } from '@/components/audio/sound-popover';
 
 type NavItem = {
   href: string;
@@ -47,6 +48,7 @@ export function NavBar() {
       </div>
 
       <div className="flex items-center gap-2">
+        <SoundPopover />
         {isSignedIn ? (
           <UserButton />
         ) : (

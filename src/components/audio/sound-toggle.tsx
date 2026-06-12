@@ -7,6 +7,8 @@ import {
   Flame,
   Bird,
   Wind,
+  CloudLightning,
+  Droplets,
   Music,
   type LucideIcon,
 } from 'lucide-react';
@@ -17,9 +19,8 @@ const SOUND_ICONS: Record<string, LucideIcon> = {
   fire: Flame,
   birds: Bird,
   wind: Wind,
-  'lofi-chill': Music,
-  'lofi-jazz': Music,
-  'lofi-piano': Music,
+  thunder: CloudLightning,
+  water: Droplets,
 };
 
 type SoundToggleProps = {
