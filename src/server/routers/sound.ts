@@ -19,7 +19,7 @@ export const soundRouter = router({
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.soundMix.create({
         data: {
-          userId: ctx.user.id!,
+          userId: ctx.userId,
           name: input.name,
           channels: {
             create: input.channels,
@@ -31,7 +31,7 @@ export const soundRouter = router({
 
   getMixes: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.soundMix.findMany({
-      where: { userId: ctx.user.id! },
+      where: { userId: ctx.userId },
       orderBy: { createdAt: 'desc' },
       include: { channels: true },
     });
@@ -49,7 +49,7 @@ export const soundRouter = router({
         throw new TRPCError({ code: 'NOT_FOUND', message: 'Mix not found' });
       }
 
-      if (mix.userId !== ctx.user.id!) {
+      if (mix.userId !== ctx.userId) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
@@ -60,7 +60,7 @@ export const soundRouter = router({
   setDefault: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id!;
+      const userId = ctx.userId;
 
       const mix = await ctx.prisma.soundMix.findUnique({
         where: { id: input.id },

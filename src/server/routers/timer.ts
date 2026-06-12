@@ -15,7 +15,7 @@ export const timerRouter = router({
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.timerSession.create({
         data: {
-          userId: ctx.user.id!,
+          userId: ctx.userId,
           preset: input.preset,
           focusMin: input.focusMin,
           breakMin: input.breakMin,
@@ -34,7 +34,7 @@ export const timerRouter = router({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.prisma.timerSession.findMany({
-        where: { userId: ctx.user.id! },
+        where: { userId: ctx.userId },
         orderBy: { completedAt: 'desc' },
         take: input.limit + 1,
         ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
@@ -50,7 +50,7 @@ export const timerRouter = router({
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.user.id!;
+    const userId = ctx.userId;
     const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const startOfWeek = new Date(startOfDay);
@@ -116,10 +116,8 @@ export const timerRouter = router({
   dailyChart: protectedProcedure
     .input(z.object({ days: z.number().int().min(1).max(90).default(7) }))
     .query(async ({ ctx, input }) => {
-      const userId = ctx.user.id!;
+      const userId = ctx.userId;
       const now = new Date();
-
-      // Build array of last N days (oldest → newest)
       const result: Array<{ date: string; sessions: number; totalSec: number }> = [];
 
       for (let i = input.days - 1; i >= 0; i--) {
@@ -148,4 +146,3 @@ export const timerRouter = router({
       return result;
     }),
 });
-

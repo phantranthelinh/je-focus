@@ -4,7 +4,7 @@ import { router, protectedProcedure } from '../trpc';
 export const userRouter = router({
   profile: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.user.findUnique({
-      where: { id: ctx.user.id! },
+      where: { id: ctx.userId },
       select: {
         id: true,
         name: true,
@@ -30,7 +30,7 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.user.update({
-        where: { id: ctx.user.id! },
+        where: { id: ctx.userId },
         data: {
           ...(input.name !== undefined && { name: input.name }),
           ...(input.image !== undefined && { image: input.image }),
