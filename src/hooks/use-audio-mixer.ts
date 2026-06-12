@@ -20,10 +20,10 @@ export function useAudioMixer() {
     }))
   );
 
-  // Preload all audio buffers once on mount
-  useEffect(() => {
-    audioEngine.preload();
-  }, []);
+  // NOTE: we deliberately do NOT preload audio on mount. This hook lives in the
+  // navbar (mounted on every page), and eagerly fetching the full catalog would
+  // pull ~9MB of mp3 on first paint for users who never open the mixer. Buffers
+  // load lazily on first play(); call audioEngine.preload() on mixer-open to warm them.
 
   // Sync store state → AudioEngine
   const { channels, masterVolume, isMuted } = store;

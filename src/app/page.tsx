@@ -7,7 +7,6 @@ import { Mascot } from '@/components/timer/mascot';
 import { DailyTracker } from '@/components/timer/daily-tracker';
 import { useTimer } from '@/hooks/use-timer';
 import { useNotification } from '@/hooks/use-notification';
-import { motion } from 'framer-motion';
 
 export default function TimerPage() {
   const {
@@ -56,14 +55,13 @@ export default function TimerPage() {
           mode={mode}
         />
 
-        <motion.p
+        {/* key remounts on text change so the fade-in-up animation replays */}
+        <p
           key={statusText}
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-lg font-medium text-black/60 tracking-wide"
+          className="animate-fade-in-up text-lg font-medium text-black/60 tracking-wide"
         >
           {statusText}
-        </motion.p>
+        </p>
 
         <TimerDisplay
           remainingSeconds={remainingSeconds}

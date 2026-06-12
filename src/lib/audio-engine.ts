@@ -12,6 +12,8 @@ class AudioEngine {
   private masterGain: GainNode | null = null;
   private buffers: Map<string, AudioBuffer> = new Map();
   private channels: Map<string, ChannelState> = new Map();
+  private loading: Map<string, Promise<AudioBuffer | null>> = new Map();
+  private starting: Set<string> = new Set();
   private _masterVolume = 1;
 
   private getCtx(): AudioContext {
@@ -24,22 +26,50 @@ class AudioEngine {
     return this.ctx;
   }
 
-  async preload(): Promise<void> {
+  /**
+   * Fetch + decode a single sound's buffer on demand. Idempotent and
+   * de-duplicated: concurrent calls for the same id share one in-flight
+   * request, and an already-decoded buffer resolves immediately. Per-file
+   * failures are isolated (resolve to null) so one bad asset can't break others.
+   */
+  private ensureLoaded(soundId: string): Promise<AudioBuffer | null> {
+    const cached = this.buffers.get(soundId);
+    if (cached) return Promise.resolve(cached);
+
+    const inFlight = this.loading.get(soundId);
+    if (inFlight) return inFlight;
+
+    const sound = SOUND_CATALOG.find((s) => s.id === soundId);
+    if (!sound) return Promise.resolve(null);
+
     const ctx = this.getCtx();
-    await Promise.all(
-      SOUND_CATALOG.map(async (sound) => {
-        if (this.buffers.has(sound.id)) return;
-        try {
-          const res = await fetch(sound.src);
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const arrayBuffer = await res.arrayBuffer();
-          const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-          this.buffers.set(sound.id, audioBuffer);
-        } catch (err) {
-          console.warn(`[audio] failed to preload "${sound.id}" (${sound.src}):`, err);
-        }
-      })
-    );
+    const promise = (async () => {
+      try {
+        const res = await fetch(sound.src);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const arrayBuffer = await res.arrayBuffer();
+        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+        this.buffers.set(sound.id, audioBuffer);
+        return audioBuffer;
+      } catch (err) {
+        console.warn(`[audio] failed to load "${sound.id}" (${sound.src}):`, err);
+        return null;
+      } finally {
+        this.loading.delete(sound.id);
+      }
+    })();
+
+    this.loading.set(soundId, promise);
+    return promise;
+  }
+
+  /**
+   * Warm the buffer cache for all catalog sounds. Call this when the user
+   * signals intent to use audio (e.g. opens the mixer) so toggles feel instant —
+   * NOT on initial page load (that would pull ~9MB of audio nobody asked for).
+   */
+  async preload(): Promise<void> {
+    await Promise.all(SOUND_CATALOG.map((sound) => this.ensureLoaded(sound.id)));
   }
 
   isSuspended(): boolean {
@@ -53,7 +83,9 @@ class AudioEngine {
   }
 
   isPlaying(soundId: string): boolean {
-    return this.channels.has(soundId);
+    // Treat a sound mid-startup as playing so the store sync effect doesn't
+    // fire a second play() while its buffer is still being fetched/decoded.
+    return this.channels.has(soundId) || this.starting.has(soundId);
   }
 
   async play(soundId: string, targetVolume = 1): Promise<void> {
@@ -63,7 +95,13 @@ class AudioEngine {
       await ctx.resume();
     }
 
-    const buffer = this.buffers.get(soundId);
+    this.starting.add(soundId);
+    let buffer: AudioBuffer | null;
+    try {
+      buffer = await this.ensureLoaded(soundId);
+    } finally {
+      this.starting.delete(soundId);
+    }
     if (!buffer) return;
 
     // Crossfade: fade out existing source while new one fades in

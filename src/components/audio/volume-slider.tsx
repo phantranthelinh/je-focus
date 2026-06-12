@@ -9,16 +9,19 @@ type VolumeSliderProps = {
   onChange: (value: number) => void;
   disabled?: boolean;
   label?: string;
+  /** Hide the leading speaker icon (e.g. when a separate mute button already shows one). */
+  hideIcon?: boolean;
 };
 
-export function VolumeSlider({ value, onChange, disabled, label }: VolumeSliderProps) {
+export function VolumeSlider({ value, onChange, disabled, label, hideIcon }: VolumeSliderProps) {
   return (
     <div className={cn('flex items-center gap-2 w-full', disabled && 'opacity-40')}>
-      {value === 0 ? (
-        <VolumeX size={16} className="text-brand-text/40 shrink-0" />
-      ) : (
-        <Volume2 size={16} className="text-brand-text/60 shrink-0" />
-      )}
+      {!hideIcon &&
+        (value === 0 ? (
+          <VolumeX size={16} className="text-brand-text/40 shrink-0" />
+        ) : (
+          <Volume2 size={16} className="text-brand-text/60 shrink-0" />
+        ))}
 
       {label && (
         <span className="text-xs text-brand-text/60 w-14 shrink-0 truncate">{label}</span>

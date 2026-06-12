@@ -52,6 +52,11 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   output: "standalone",
   turbopack: {},
+  experimental: {
+    // Tree-shake barrel imports so only the icons/animation primitives actually
+    // used get bundled (lucide-react is optimized by default; framer-motion is not).
+    optimizePackageImports: ["framer-motion", "lucide-react"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com" },

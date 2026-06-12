@@ -5,6 +5,7 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { SoundToggle } from './sound-toggle';
 import { VolumeSlider } from './volume-slider';
 import { useAudioMixer } from '@/hooks/use-audio-mixer';
+import { audioEngine } from '@/lib/audio-engine';
 import { AMBIENT_SOUNDS } from '@/lib/sounds';
 
 export function SoundPopover() {
@@ -22,6 +23,12 @@ export function SoundPopover() {
   } = useAudioMixer();
 
   const enabledCount = Object.values(channels).filter((ch) => ch.enabled).length;
+
+  // Warm the audio buffer cache when the user opens the mixer, so toggling a
+  // sound feels instant. Audio is intentionally not preloaded on page load.
+  useEffect(() => {
+    if (open) audioEngine.preload();
+  }, [open]);
 
   // Close on click-outside and Escape
   useEffect(() => {
@@ -78,6 +85,7 @@ export function SoundPopover() {
               onChange={setMasterVolume}
               label="Master"
               disabled={isMuted}
+              hideIcon
             />
           </div>
 

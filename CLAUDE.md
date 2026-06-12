@@ -40,10 +40,16 @@ Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · Clerk (`@cl
 - `src/components/ui/` — Reusable Glassmorphism primitives
 - `type` over `interface` for all TypeScript definitions
 
+### Animation strategy (perf)
+- **framer-motion is code-split via `LazyMotion`** (`src/app/providers.tsx`, `strict` mode): use the `m` component (NOT `motion`) in client components. The ~30kb feature engine (`domAnimation`) loads async after first paint; `strict` throws if `motion.*` sneaks in. Interactive/exit animations (controls, settings panel, daily-tracker bottom sheet) stay in framer.
+- **Always-on / enter-only animations are CSS keyframes** in `globals.css` (`.mascot-float-*`, `.mascot-enter`, `.animate-fade-in-up`), GPU-composited, no JS rAF loop — used by `Mascot` and the timer-page status text. Replay on change via React `key`. Respects `prefers-reduced-motion`.
+- `next.config.ts` `experimental.optimizePackageImports` tree-shakes `framer-motion` + `lucide-react`.
+
 ### Audio Channels
 - Ambient (7, each channel: independent volume, multiple play simultaneously): rain, ocean, fire, birds, wind, thunder, water (`SOUND_CATALOG` in `src/lib/sounds.ts`)
-- Lo-fi entries were dropped from the catalog (UI doesn't surface them; `audioEngine.preload()` fetches the whole catalog, so unused entries with missing files would break preload). `LOFI_SOUNDS` is now `[]`.
-- **Mixer UI wired into navbar** via `src/components/audio/sound-popover.tsx` (`<SoundPopover />` in `nav-bar.tsx` right cluster) — icon button + active-count badge opens a floating panel (master volume, mute, 7 toggles, per-sound sliders). Reuses `useAudioMixer` + `SoundToggle` + `VolumeSlider`. Timer page unchanged. `audioEngine.preload()` isolates per-file failures with try/catch.
+- Lo-fi entries were dropped from the catalog (UI doesn't surface them). `LOFI_SOUNDS` is now `[]`.
+- **Lazy audio loading (perf):** `useAudioMixer` does **NOT** preload on mount — it lives in the navbar (every page), so eager preload would pull ~9.2MB of mp3 on first paint for users who never open the mixer. Buffers load on demand via `audioEngine.ensureLoaded()` (fetch+decode, deduped by in-flight `loading` map + `starting` set to prevent double-play). `play()` lazy-loads its own buffer; `SoundPopover` calls `audioEngine.preload()` on open to warm all 7. Verified: 0 `/sounds/` requests on load, 7 on mixer-open.
+- **Mixer UI wired into navbar** via `src/components/audio/sound-popover.tsx` (`<SoundPopover />` in `nav-bar.tsx` right cluster) — icon button + active-count badge opens a floating panel (master volume, mute, 7 toggles, per-sound sliders). Reuses `useAudioMixer` + `SoundToggle` + `VolumeSlider`. Timer page unchanged. `ensureLoaded()` isolates per-file failures (resolves `null`).
 - Audio assets in `public/sounds/ambient/*.mp3`: 6 are Ogg/Vorbis bytes saved as `.mp3` (Chrome `decodeAudioData` sniffs content; **Safari can't decode Vorbis** → those 6 are silently skipped there); `thunder.mp3` is true MP3. `ocean.mp3` is CC BY 3.0 (attribution required); the rest are CC0/public-domain.
 
 ### Timer Presets

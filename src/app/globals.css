@@ -24,6 +24,41 @@
   box-shadow: 0 12px 50px -12px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Mascot + status animations (CSS, GPU-composited — no JS runtime) ──
+   Replaces framer-motion on the always-rendered landing components so the
+   timer page doesn't ship/run the animation engine for these. */
+@keyframes mascot-enter {
+  from { opacity: 0; transform: translateY(10px) scale(0.8); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+@keyframes mascot-float-idle {
+  0%, 100% { transform: translateY(0)    scale(0.98); }
+  50%      { transform: translateY(-2px) scale(1);    }
+}
+@keyframes mascot-float-focusing {
+  0%, 100% { transform: translateY(0)    scale(0.99); }
+  50%      { transform: translateY(-4px) scale(1.02); }
+}
+@keyframes mascot-float-resting {
+  0%, 100% { transform: translateY(0)    scale(0.97); }
+  50%      { transform: translateY(-1px) scale(1.01); }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.mascot-enter { animation: mascot-enter 0.5s ease-out; }
+.mascot-float-idle     { animation: mascot-float-idle     3s ease-in-out infinite; }
+.mascot-float-focusing { animation: mascot-float-focusing 2s ease-in-out infinite; }
+.mascot-float-resting  { animation: mascot-float-resting  4s ease-in-out infinite; }
+.animate-fade-in-up    { animation: fade-in-up 0.4s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-enter, .mascot-float-idle, .mascot-float-focusing,
+  .mascot-float-resting, .animate-fade-in-up { animation: none; }
+}
+
 @theme inline {
   --font-sans: 'Inter', var(--font-geist-sans), sans-serif;
   --font-heading: 'Inter', var(--font-geist-sans), sans-serif;

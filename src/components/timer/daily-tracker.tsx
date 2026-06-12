@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ChevronUp, Flame, Timer, Zap } from 'lucide-react';
 import { useTrackingStore } from '@/stores/tracking-store';
 import { useAuth } from '@clerk/nextjs';
@@ -50,7 +50,7 @@ function BarChart({ days }: { days: DayBar[] }) {
         return (
           <div key={day.date} className="flex flex-col items-center justify-end flex-1 gap-1 h-full">
             <div className="relative flex flex-col items-center justify-end w-full flex-1">
-              <motion.div
+              <m.div
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
                 transition={{ duration: 0.5, delay: i * 0.06, ease: 'easeOut' }}
@@ -154,7 +154,7 @@ export function DailyTracker() {
       {/* Backdrop */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -167,14 +167,14 @@ export function DailyTracker() {
       </AnimatePresence>
 
       {/* Bottom Sheet */}
-      <motion.div
+      <m.div
         className="fixed bottom-0 left-0 right-0 z-40 flex flex-col items-center"
         style={{ pointerEvents: 'none' }}
       >
         {/* Sheet panel */}
         <AnimatePresence>
           {open && (
-            <motion.div
+            <m.div
               key="sheet"
               initial={{ y: '100%', opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -220,12 +220,12 @@ export function DailyTracker() {
                   value={`${streak}d`}
                 />
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* Toggle pill — always visible */}
-        <motion.button
+        <m.button
           onClick={() => setOpen((v) => !v)}
           style={{ pointerEvents: 'auto' }}
           whileTap={{ scale: 0.94 }}
@@ -241,15 +241,15 @@ export function DailyTracker() {
             }
           `}
         >
-          <motion.div
+          <m.div
             animate={{ rotate: open ? 180 : 0 }}
             transition={{ duration: 0.3 }}
           >
             <ChevronUp size={16} strokeWidth={2.5} />
-          </motion.div>
+          </m.div>
           <span>Today — {todaySessions} session{todaySessions !== 1 ? 's' : ''}</span>
-        </motion.button>
-      </motion.div>
+        </m.button>
+      </m.div>
     </>
   );
 }

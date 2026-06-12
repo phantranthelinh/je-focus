@@ -1,5 +1,5 @@
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 type TimerControlsProps = {
   isRunning: boolean;
@@ -18,7 +18,7 @@ export function TimerControls({
     <div className="flex items-center justify-center gap-6 my-6">
       <AnimatePresence mode="wait">
         {isRunning ? (
-          <motion.button 
+          <m.button 
             key="pause"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -30,9 +30,9 @@ export function TimerControls({
           >
             <Pause size={20} className="flex-shrink-0 mr-3 fill-white" />
             <span className="font-bold text-lg tracking-wider">PAUSE</span>
-          </motion.button>
+          </m.button>
         ) : (
-          <motion.button 
+          <m.button 
             key="start"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -44,11 +44,11 @@ export function TimerControls({
           >
             <Play size={22} className="flex-shrink-0 mr-3 fill-white ml-2" />
             <span className="font-bold text-xl tracking-wider pr-2">START</span>
-          </motion.button>
+          </m.button>
         )}
       </AnimatePresence>
 
-      <motion.button 
+      <m.button 
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.1, rotate: -45 }}
         onClick={onReset} 
@@ -56,7 +56,7 @@ export function TimerControls({
         className="flex items-center justify-center w-14 h-14 rounded-full bg-black/5 text-black/80 backdrop-blur-sm"
       >
         <RotateCcw size={20} strokeWidth={2.5} />
-      </motion.button>
+      </m.button>
     </div>
   );
 }

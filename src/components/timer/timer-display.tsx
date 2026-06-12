@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Settings } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useTimerStore } from '@/stores/timer-store';
 
@@ -101,7 +101,7 @@ export function TimerDisplay({
       {/* Inline settings panel */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
@@ -196,7 +196,7 @@ export function TimerDisplay({
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
