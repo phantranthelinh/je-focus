@@ -23,6 +23,13 @@ Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · Clerk (`@cl
 - `src/middleware.ts` — `clerkMiddleware`; only `/dashboard(.*)` is protected via `auth.protect()`.
 - `src/server/context.ts` — `auth()` reads `userId`, upserts `User` (Prisma `User.id` = Clerk userId).
 - Env: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (client, **inlined at build time** — must be a Docker build-arg, see `Dockerfile`), `CLERK_SECRET_KEY` (server, runtime).
+- **"Development mode" badge**: rendered by Clerk whenever `pk_test_`/`sk_test_` (dev instance) keys are used — not removable via CSS/`appearance`. To remove it, switch to a Production instance and use `pk_live_`/`sk_live_` keys (requires custom domain + DNS in Clerk Dashboard). Production Docker build:
+  ```bash
+  docker build \
+    --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx \
+    -t jefocus .
+  # CLERK_SECRET_KEY=sk_live_xxx passed as a runtime env var (NOT a build-arg)
+  ```
 
 ## Architecture
 

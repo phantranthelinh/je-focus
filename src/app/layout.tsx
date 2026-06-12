@@ -23,7 +23,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        options: {
+          // Hide Clerk's "Development mode" badge while on dev (pk_test_) keys.
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
+      }}
+    >
       <html lang="en" className={`${geist.variable} h-full antialiased`}>
         <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
           <Providers>
