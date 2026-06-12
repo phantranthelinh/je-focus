@@ -29,10 +29,15 @@ class AudioEngine {
     await Promise.all(
       SOUND_CATALOG.map(async (sound) => {
         if (this.buffers.has(sound.id)) return;
-        const res = await fetch(sound.src);
-        const arrayBuffer = await res.arrayBuffer();
-        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-        this.buffers.set(sound.id, audioBuffer);
+        try {
+          const res = await fetch(sound.src);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const arrayBuffer = await res.arrayBuffer();
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+          this.buffers.set(sound.id, audioBuffer);
+        } catch (err) {
+          console.warn(`[audio] failed to preload "${sound.id}" (${sound.src}):`, err);
+        }
       })
     );
   }
