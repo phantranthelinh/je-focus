@@ -26,9 +26,8 @@ export function useAudioMixer() {
   }, []);
 
   // Sync store state → AudioEngine
+  const { channels, masterVolume, isMuted } = store;
   useEffect(() => {
-    const { channels, masterVolume, isMuted } = store;
-
     for (const [id, channel] of Object.entries(channels)) {
       if (channel.enabled && !isMuted) {
         if (!audioEngine.isPlaying(id)) {
@@ -42,7 +41,7 @@ export function useAudioMixer() {
     }
 
     audioEngine.setMasterVolume(isMuted ? 0 : masterVolume);
-  }, [store.channels, store.masterVolume, store.isMuted]);
+  }, [channels, masterVolume, isMuted]);
 
   // Cleanup on unmount
   useEffect(() => {
