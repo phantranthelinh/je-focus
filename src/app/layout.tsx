@@ -29,6 +29,11 @@ export default function RootLayout({
           // Hide Clerk's "Development mode" badge while on dev (pk_test_) keys.
           unsafe_disableDevelopmentModeWarnings: true,
         },
+        elements: {
+          // Hide the "Secured by Clerk" branding badge in the footer.
+          // Keeps the sibling "Don't have an account? Sign up" action visible.
+          footerItem: { display: 'none' },
+        },
       }}
     >
       <html lang="en" className={`${geist.variable} h-full antialiased`}>
