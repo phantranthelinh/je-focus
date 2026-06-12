@@ -1,10 +1,13 @@
-name: CI & Deploy
+name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+# Railway deploys automatically on push to main via GitHub integration.
+# This workflow only gates quality: lint → type-check → build must pass first.
 
 jobs:
   ci:
@@ -38,26 +41,3 @@ jobs:
           NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
           NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
           NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
-
-  deploy:
-    name: Deploy to Vercel
-    runs-on: ubuntu-latest
-    needs: ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-
-      - name: Deploy
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
