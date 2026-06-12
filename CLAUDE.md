@@ -41,8 +41,10 @@ Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · Clerk (`@cl
 - `type` over `interface` for all TypeScript definitions
 
 ### Audio Channels
-- Ambient: rain, ocean, fire, birds, wind
-- Lo-fi: lofi-chill, lofi-jazz, lofi-piano (each channel: independent volume)
+- Ambient (7, each channel: independent volume, multiple play simultaneously): rain, ocean, fire, birds, wind, thunder, water (`SOUND_CATALOG` in `src/lib/sounds.ts`)
+- Lo-fi entries were dropped from the catalog (UI doesn't surface them; `audioEngine.preload()` fetches the whole catalog, so unused entries with missing files would break preload). `LOFI_SOUNDS` is now `[]`.
+- **Mixer UI wired into navbar** via `src/components/audio/sound-popover.tsx` (`<SoundPopover />` in `nav-bar.tsx` right cluster) — icon button + active-count badge opens a floating panel (master volume, mute, 7 toggles, per-sound sliders). Reuses `useAudioMixer` + `SoundToggle` + `VolumeSlider`. Timer page unchanged. `audioEngine.preload()` isolates per-file failures with try/catch.
+- Audio assets in `public/sounds/ambient/*.mp3`: 6 are Ogg/Vorbis bytes saved as `.mp3` (Chrome `decodeAudioData` sniffs content; **Safari can't decode Vorbis** → those 6 are silently skipped there); `thunder.mp3` is true MP3. `ocean.mp3` is CC BY 3.0 (attribution required); the rest are CC0/public-domain.
 
 ### Timer Presets
 - Pomodoro: 25/5/15min (4 rounds) · Deep Work: 50/10min · Quick: 15/3min · Custom
