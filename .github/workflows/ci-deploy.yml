@@ -6,8 +6,10 @@ on:
   pull_request:
     branches: [main]
 
-# Railway deploys automatically on push to main via GitHub integration.
-# This workflow only gates quality: lint → type-check → build must pass first.
+# This workflow is the deploy gate. With Railway's "Wait for CI" enabled,
+# Railway holds the deploy until these checks pass: lint → type-check → build.
+# If any step fails (lint runs with --max-warnings=0, so warnings fail too),
+# Railway does not deploy the commit.
 
 jobs:
   ci:
