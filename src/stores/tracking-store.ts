@@ -18,6 +18,8 @@ type TrackingActions = {
   recordSession: (totalSec: number) => void;
   /** Returns the last N days as an array sorted oldest→newest */
   getRecentDays: (n: number) => Array<{ date: string } & DayRecord>;
+  /** Clears all tracked session data (used on migration to server) */
+  clearAll: () => void;
 };
 
 function todayKey(): string {
@@ -66,6 +68,8 @@ export const useTrackingStore = create<TrackingState & TrackingActions>()(
 
         return days;
       },
+
+      clearAll: () => set({ dailyLog: {} }),
     }),
     {
       name: 'jefocus-tracking',
