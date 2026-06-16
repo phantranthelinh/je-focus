@@ -3,7 +3,10 @@
 import { Download, Eye, EyeOff, Check } from 'lucide-react';
 import type { Editor } from '@tiptap/react';
 import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
+import { useClerkSafe } from '@/lib/clerk-hooks';
 import { clsx } from 'clsx';
+import { trpc } from '@/lib/trpc-client';
+import { useState } from 'react';
 
 type Props = {
   editor: Editor | null;
@@ -20,6 +23,15 @@ function getPlainText(html: string): string {
 
 export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
   const { isSignedIn } = useAuth();
+  const { openSignIn } = useClerkSafe();
+  const [saved, setSaved] = useState(false);
+
+  const saveMutation = trpc.note.save.useMutation({
+    onSuccess: () => {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    },
+  });
 
   const wordCount = editor
     ? ((editor.storage as { characterCount?: { words?: () => number } })?.characterCount?.words?.() ?? 0)
@@ -38,8 +50,12 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
   };
 
   const handleSave = () => {
-    if (!editor || !isSignedIn) return;
-    // Save placeholder — persistence not implemented yet
+    if (!editor) return;
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
+    saveMutation.mutate({ content: editor.getHTML() });
   };
 
   const btnClass = 'flex items-center justify-center w-9 h-9 rounded-full bg-[#ffffff] border border-brand-hairline text-brand-muted/60 hover:text-brand-muted hover:bg-brand-light transition-all shadow-sm';
@@ -66,13 +82,17 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
           {isPreview ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>
 
-        {/* Save (auth-gated) */}
+        {/* Save */}
         <button
           onClick={handleSave}
-          disabled={!isSignedIn}
-          className={clsx(btnClass, !isSignedIn && 'opacity-30 cursor-not-allowed')}
+          disabled={saveMutation.isPending}
+          className={clsx(
+            btnClass,
+            saved && 'text-brand-coral border-brand-coral/30',
+            saveMutation.isPending && 'opacity-50 cursor-not-allowed'
+          )}
           aria-label={isSignedIn ? 'Save' : 'Sign in to save'}
-          title={isSignedIn ? 'Save' : 'Sign in to save'}
+          title={isSignedIn ? 'Save note' : 'Sign in to save'}
         >
           <Check size={16} />
         </button>

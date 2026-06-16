@@ -16,6 +16,15 @@ model User {
 
   timerSessions TimerSession[]
   soundMixes    SoundMix[]
+  textNote      TextNote?
+}
+
+model TextNote {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  updatedAt DateTime @updatedAt
 }
 
 model TimerSession {
