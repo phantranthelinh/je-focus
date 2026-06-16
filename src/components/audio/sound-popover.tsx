@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX, Save, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 import { SoundToggle } from './sound-toggle';
 import { VolumeSlider } from './volume-slider';
@@ -41,14 +42,19 @@ export function SoundPopover() {
     onSuccess: () => {
       setMixName('');
       utils.sound.getMixes.invalidate();
+      toast.success('Mix saved!');
     },
+    onError: () => toast.error('Failed to save mix'),
   });
 
   const deleteMixMutation = trpc.sound.deleteMix.useMutation({
     onMutate: ({ id }) => setDeletingId(id),
     onSettled: () => setDeletingId(null),
     onSuccess: () => utils.sound.getMixes.invalidate(),
-    onError: () => utils.sound.getMixes.invalidate(),
+    onError: () => {
+      utils.sound.getMixes.invalidate();
+      toast.error('Failed to delete mix');
+    },
   });
 
   const handleSaveMix = () => {

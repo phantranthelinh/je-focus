@@ -7,6 +7,7 @@ import { useClerkSafe } from '@/lib/clerk-hooks';
 import { Trophy, Users, Search, UserPlus, Check, X, Clock } from 'lucide-react';
 import Image from 'next/image';
 import { clsx } from 'clsx';
+import { toast } from 'sonner';
 
 type Tab = 'global' | 'friends';
 
@@ -118,16 +119,23 @@ function FriendsPanel() {
   const { data: pending } = trpc.friend.pendingRequests.useQuery();
 
   const sendRequest = trpc.friend.sendRequest.useMutation({
-    onSuccess: () => utils.friend.search.invalidate(),
+    onSuccess: () => {
+      utils.friend.search.invalidate();
+      toast.success('Friend request sent!');
+    },
+    onError: () => toast.error('Could not send friend request'),
   });
   const accept = trpc.friend.accept.useMutation({
     onSuccess: () => {
       utils.friend.pendingRequests.invalidate();
       utils.leaderboard.friends.invalidate();
+      toast.success('Friend added!');
     },
+    onError: () => toast.error('Could not accept request'),
   });
   const decline = trpc.friend.decline.useMutation({
     onSuccess: () => utils.friend.pendingRequests.invalidate(),
+    onError: () => toast.error('Could not decline request'),
   });
 
   const { data: friends, isLoading: friendsLoading } = trpc.friend.list.useQuery();
@@ -136,7 +144,9 @@ function FriendsPanel() {
     onSuccess: () => {
       utils.friend.list.invalidate();
       utils.leaderboard.friends.invalidate();
+      toast.success('Friend removed');
     },
+    onError: () => toast.error('Could not remove friend'),
   });
 
   const handleSearch = (e: React.FormEvent) => {

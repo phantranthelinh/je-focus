@@ -6,6 +6,7 @@ import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 import { useClerkSafe } from '@/lib/clerk-hooks';
 import Image from 'next/image';
 import { Check, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ProfilePage() {
   const { isSignedIn } = useAuth();
@@ -18,6 +19,7 @@ export default function ProfilePage() {
   const utils = trpc.useUtils();
   const updateMutation = trpc.user.updateProfile.useMutation({
     onSuccess: () => utils.user.profile.invalidate(),
+    onError: () => toast.error('Failed to update profile'),
   });
 
   const [name, setName] = useState('');

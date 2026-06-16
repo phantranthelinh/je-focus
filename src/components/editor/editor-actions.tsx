@@ -7,6 +7,7 @@ import { useClerkSafe } from '@/lib/clerk-hooks';
 import { clsx } from 'clsx';
 import { trpc } from '@/lib/trpc-client';
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type Props = {
   editor: Editor | null;
@@ -31,6 +32,7 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     },
+    onError: () => toast.error('Failed to save note'),
   });
 
   const wordCount = editor

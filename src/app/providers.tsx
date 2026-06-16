@@ -7,6 +7,7 @@ import { trpc } from '@/lib/trpc-client';
 import { useState } from 'react';
 import { useAuthMigration } from '@/hooks/use-auth-migration';
 import { clerkEnabled } from '@/lib/clerk-config';
+import { Toaster } from 'sonner';
 
 const loadMotionFeatures = () =>
   import('framer-motion').then((mod) => mod.domAnimation);
@@ -39,6 +40,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <LazyMotion features={loadMotionFeatures} strict>
           {clerkEnabled && <MigrationRunner />}
           {children}
+          <Toaster position="bottom-right" richColors />
         </LazyMotion>
       </QueryClientProvider>
     </trpc.Provider>
