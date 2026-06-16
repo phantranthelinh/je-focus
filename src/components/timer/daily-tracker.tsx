@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { ChevronUp, Flame, Timer, Zap } from 'lucide-react';
 import { useTrackingStore } from '@/stores/tracking-store';
-import { useAuth } from '@clerk/nextjs';
+import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 import { trpc } from '@/lib/trpc-client';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@ import { useTimerStore } from '@/stores/timer-store';
 import { useTrackingStore } from '@/stores/tracking-store';
 import { TIMER_PRESETS } from '@/lib/presets';
 import { trpc } from '@/lib/trpc-client';
-import { useAuth } from '@clerk/nextjs';
+import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 
 export function useTimer() {
   const store = useTimerStore();

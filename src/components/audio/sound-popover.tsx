@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX, Save, Trash2 } from 'lucide-react';
-import { useAuth } from '@clerk/nextjs';
+import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 import { SoundToggle } from './sound-toggle';
 import { VolumeSlider } from './volume-slider';
 import { useAudioMixer } from '@/hooks/use-audio-mixer';
