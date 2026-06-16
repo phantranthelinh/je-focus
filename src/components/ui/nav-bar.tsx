@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Timer, BarChart3, PenLine, Trophy } from 'lucide-react';
+import { Timer, BarChart3, PenLine, Trophy, Download } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { useUserSafe, useClerkSafe } from '@/lib/clerk-hooks';
 import { clerkEnabled } from '@/lib/clerk-config';
@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SoundPopover } from '@/components/audio/sound-popover';
 import { CompactTimer } from '@/components/editor/compact-timer';
+import { usePwaInstall } from '@/hooks/use-pwa-install';
 
 type NavItem = {
   href: string;
@@ -27,6 +28,7 @@ export function NavBar() {
   const pathname = usePathname();
   const { isSignedIn } = useUserSafe();
   const { openSignIn } = useClerkSafe();
+  const { canInstall, install } = usePwaInstall();
 
   return (
     <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between !rounded-none">
@@ -57,6 +59,16 @@ export function NavBar() {
       </div>
 
       <div className="flex items-center gap-2">
+        {canInstall && (
+          <button
+            onClick={install}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30 transition-all"
+            title="Install app"
+          >
+            <Download size={16} />
+            <span className="hidden sm:inline">Install</span>
+          </button>
+        )}
         <SoundPopover />
         {clerkEnabled && isSignedIn ? (
           <UserButton />
