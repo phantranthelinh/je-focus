@@ -24,6 +24,7 @@ export function TextEditor() {
       CharacterCount,
     ],
     content: DEFAULT_CONTENT,
+    autofocus: false,
     editorProps: {
       attributes: { class: EDITOR_CLASS },
     },
