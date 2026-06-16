@@ -130,6 +130,15 @@ function FriendsPanel() {
     onSuccess: () => utils.friend.pendingRequests.invalidate(),
   });
 
+  const { data: friends, isLoading: friendsLoading } = trpc.friend.list.useQuery();
+
+  const remove = trpc.friend.decline.useMutation({
+    onSuccess: () => {
+      utils.friend.list.invalidate();
+      utils.leaderboard.friends.invalidate();
+    },
+  });
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
@@ -224,6 +233,35 @@ function FriendsPanel() {
           </div>
         </div>
       )}
+
+      {/* Current friends */}
+      <div>
+        <h3 className="text-sm font-medium text-brand-text mb-2">My Friends</h3>
+        {friendsLoading ? (
+          <p className="text-sm text-brand-muted">Loading…</p>
+        ) : !friends || friends.length === 0 ? (
+          <p className="text-sm text-brand-muted/60 italic">No friends yet. Add someone above!</p>
+        ) : (
+          <div className="divide-y divide-brand-hairline rounded-lg border border-brand-hairline overflow-hidden">
+            {friends.map(({ friendshipId, user: u }) => (
+              <div key={friendshipId} className="flex items-center gap-3 p-3 bg-white">
+                <Avatar name={u.name ?? 'User'} image={u.image ?? null} size={32} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-brand-text truncate">{u.name ?? 'Unnamed'}</p>
+                  <p className="text-xs text-brand-muted truncate">{u.email}</p>
+                </div>
+                <button
+                  onClick={() => remove.mutate({ friendshipId })}
+                  disabled={remove.isPending}
+                  className="text-xs text-brand-muted hover:text-red-500 transition-colors disabled:opacity-40"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
