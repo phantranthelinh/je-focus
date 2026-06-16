@@ -68,4 +68,22 @@ export const friendRouter = router({
       orderBy: { createdAt: 'desc' },
     });
   }),
+
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const friendships = await ctx.prisma.friendship.findMany({
+      where: {
+        status: 'accepted',
+        OR: [{ userId: ctx.userId }, { friendId: ctx.userId }],
+      },
+      include: {
+        user: { select: { id: true, name: true, email: true, image: true } },
+        friend: { select: { id: true, name: true, email: true, image: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return friendships.map((f) => ({
+      friendshipId: f.id,
+      user: f.userId === ctx.userId ? f.friend : f.user,
+    }));
+  }),
 });
