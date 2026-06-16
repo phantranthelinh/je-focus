@@ -145,4 +145,39 @@ export const timerRouter = router({
 
       return result;
     }),
+
+  migrateSessions: protectedProcedure
+    .input(
+      z.object({
+        sessions: z.array(
+          z.object({
+            date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+            totalFocusSec: z.number().int().positive(),
+            sessionCount: z.number().int().positive(),
+          })
+        ).min(1).max(365),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const rows = input.sessions.map(({ date, totalFocusSec }) => {
+        const [y, m, d] = date.split('-').map(Number);
+        const completedAt = new Date(y, m - 1, d, 12, 0, 0);
+        return {
+          userId: ctx.userId,
+          preset: 'migrated',
+          focusMin: 25,
+          breakMin: 5,
+          rounds: 1,
+          totalFocusSec,
+          completedAt,
+        };
+      });
+
+      await ctx.prisma.timerSession.createMany({
+        data: rows,
+        skipDuplicates: false,
+      });
+
+      return { migrated: rows.length };
+    }),
 });
