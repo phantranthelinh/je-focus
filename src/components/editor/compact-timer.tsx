@@ -44,7 +44,7 @@ export function CompactTimer() {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-xs font-medium text-black/40 uppercase tracking-wide">
+      <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">
         {MODE_LABELS[mode] ?? 'Ready'}
       </span>
       <span className="text-base font-mono font-semibold text-brand-text tabular-nums">
@@ -53,14 +53,14 @@ export function CompactTimer() {
       <div className="flex items-center gap-1">
         <button
           onClick={isRunning ? pause : handleStart}
-          className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-brand-light/40 text-brand-text/70 hover:text-brand-text transition-all"
+          className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-brand-light text-brand-muted hover:text-brand-coral transition-all"
           aria-label={isRunning ? 'Pause' : 'Start'}
         >
           {isRunning ? <Pause size={14} /> : <Play size={14} />}
         </button>
         <button
           onClick={reset}
-          className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-brand-light/40 text-brand-text/40 hover:text-brand-text/70 transition-all"
+          className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-brand-light text-brand-muted/50 hover:text-brand-muted transition-all"
           aria-label="Reset"
         >
           <RotateCcw size={13} />

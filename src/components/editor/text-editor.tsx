@@ -40,12 +40,12 @@ export function TextEditor() {
       />
 
       {editor && showMenu && !isPreview && (
-        <div className="fixed left-1/2 -translate-x-1/2 top-24 flex items-center gap-0.5 bg-white/90 backdrop-blur shadow-lg rounded-xl p-1 border border-black/5 z-50 animate-fade-in-up">
+        <div className="fixed left-1/2 -translate-x-1/2 top-24 flex items-center gap-0.5 bg-[#faf9f5] shadow-md rounded-xl p-1 border border-brand-hairline z-50 animate-fade-in-up">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={clsx(
               'px-2 py-1 rounded-lg text-sm font-bold transition-all',
-              editor.isActive('bold') ? 'bg-brand-light text-brand-text' : 'text-black/60 hover:bg-brand-light/50'
+              editor.isActive('bold') ? 'bg-brand-surface text-brand-text' : 'text-brand-muted hover:bg-brand-light'
             )}
           >
             B
@@ -54,7 +54,7 @@ export function TextEditor() {
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={clsx(
               'px-2 py-1 rounded-lg text-sm italic transition-all',
-              editor.isActive('italic') ? 'bg-brand-light text-brand-text' : 'text-black/60 hover:bg-brand-light/50'
+              editor.isActive('italic') ? 'bg-brand-surface text-brand-text' : 'text-brand-muted hover:bg-brand-light'
             )}
           >
             I
@@ -63,7 +63,7 @@ export function TextEditor() {
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             className={clsx(
               'flex items-center justify-center px-2 py-1 rounded-lg transition-all',
-              editor.isActive('heading', { level: 1 }) ? 'bg-brand-light text-brand-text' : 'text-black/60 hover:bg-brand-light/50'
+              editor.isActive('heading', { level: 1 }) ? 'bg-brand-surface text-brand-text' : 'text-brand-muted hover:bg-brand-light'
             )}
           >
             <Heading1 size={14} />
@@ -72,7 +72,7 @@ export function TextEditor() {
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={clsx(
               'flex items-center justify-center px-2 py-1 rounded-lg transition-all',
-              editor.isActive('heading', { level: 2 }) ? 'bg-brand-light text-brand-text' : 'text-black/60 hover:bg-brand-light/50'
+              editor.isActive('heading', { level: 2 }) ? 'bg-brand-surface text-brand-text' : 'text-brand-muted hover:bg-brand-light'
             )}
           >
             <Heading2 size={14} />

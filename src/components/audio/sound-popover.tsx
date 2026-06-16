@@ -107,7 +107,7 @@ export function SoundPopover() {
       >
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         {enabledCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 flex items-center justify-center rounded-full bg-brand-dark text-white text-[10px] font-semibold leading-none">
+          <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 flex items-center justify-center rounded-full bg-brand-coral text-white text-[10px] font-semibold leading-none">
             {enabledCount}
           </span>
         )}
@@ -137,7 +137,7 @@ export function SoundPopover() {
             />
           </div>
 
-          <hr className="border-black/10 mb-3" />
+          <hr className="border-brand-hairline mb-3" />
 
           {/* Sound toggles */}
           <div className="grid grid-cols-4 gap-2">
@@ -165,10 +165,10 @@ export function SoundPopover() {
           </div>
 
           {/* Sound Presets */}
-          <hr className="border-black/10 my-3" />
+          <hr className="border-brand-hairline my-3" />
           {isSignedIn ? (
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-black/50 uppercase tracking-wide">Presets</p>
+              <p className="text-xs font-semibold text-brand-muted uppercase tracking-wide">Presets</p>
 
               {/* Save current mix */}
               <div className="flex gap-2">
@@ -179,12 +179,12 @@ export function SoundPopover() {
                   onKeyDown={(e) => e.key === 'Enter' && handleSaveMix()}
                   placeholder="Mix name…"
                   maxLength={80}
-                  className="flex-1 min-w-0 px-2 py-1 text-sm rounded-lg bg-white/40 border border-black/10 outline-none placeholder:text-black/30"
+                  className="flex-1 min-w-0 px-2 py-1 text-sm rounded-lg bg-brand-light border border-brand-hairline outline-none placeholder:text-brand-muted/50 text-brand-text"
                 />
                 <button
                   onClick={handleSaveMix}
                   disabled={!mixName.trim() || saveMixMutation.isPending}
-                  className="shrink-0 flex items-center gap-1 px-2 py-1 text-sm rounded-lg bg-green-300/60 text-black/70 hover:bg-green-300/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="shrink-0 flex items-center gap-1 px-2 py-1 text-sm rounded-lg bg-brand-coral text-white hover:bg-brand-coral-active disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   aria-label="Save mix"
                 >
                   <Save size={14} />
@@ -198,7 +198,7 @@ export function SoundPopover() {
                     <li key={mix.id} className="flex items-center gap-2">
                       <button
                         onClick={() => handleLoadMix(mix)}
-                        className="flex-1 min-w-0 text-left text-sm px-2 py-1 rounded-lg bg-white/30 hover:bg-white/50 text-black/70 truncate transition-all"
+                        className="flex-1 min-w-0 text-left text-sm px-2 py-1 rounded-lg bg-brand-light hover:bg-brand-surface text-brand-text truncate transition-all"
                       >
                         {mix.name}
                       </button>
@@ -214,11 +214,11 @@ export function SoundPopover() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-black/40 italic">No saved mixes yet</p>
+                <p className="text-xs text-brand-muted/60 italic">No saved mixes yet</p>
               )}
             </div>
           ) : (
-            <p className="text-xs text-black/40 text-center">Sign in to save mixes</p>
+            <p className="text-xs text-brand-muted/60 text-center">Sign in to save mixes</p>
           )}
         </div>
       )}

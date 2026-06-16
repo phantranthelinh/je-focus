@@ -57,16 +57,16 @@ function BarChart({ days }: { days: DayBar[] }) {
                 style={{ height: `${pct}%`, originY: 1 }}
                 className={`w-full rounded-full transition-colors ${
                   isToday
-                    ? 'bg-black/85'
+                    ? 'bg-brand-coral'
                     : day.totalSec > 0
-                    ? 'bg-black/30'
-                    : 'bg-black/8'
+                    ? 'bg-brand-coral/30'
+                    : 'bg-brand-hairline'
                 }`}
               />
             </div>
             <span
               className={`text-[10px] font-medium leading-none ${
-                isToday ? 'text-black/70 font-bold' : 'text-black/35'
+                isToday ? 'text-brand-coral font-bold' : 'text-brand-muted/50'
               }`}
             >
               {label}
@@ -90,10 +90,10 @@ function StatChip({
   value: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-0.5 flex-1 bg-black/5 rounded-2xl py-3 px-2">
-      <div className="flex items-center gap-1 text-black/50 mb-0.5">{icon}</div>
-      <span className="text-base font-black text-black/85 leading-none">{value}</span>
-      <span className="text-[10px] text-black/40 font-medium leading-none mt-0.5">{label}</span>
+    <div className="flex flex-col items-center gap-0.5 flex-1 bg-brand-light rounded-2xl py-3 px-2">
+      <div className="flex items-center gap-1 text-brand-coral mb-0.5">{icon}</div>
+      <span className="text-base font-black text-brand-text leading-none">{value}</span>
+      <span className="text-[10px] text-brand-muted/60 font-medium leading-none mt-0.5">{label}</span>
     </div>
   );
 }
@@ -180,18 +180,18 @@ export function DailyTracker() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: '100%', opacity: 0 }}
               transition={{ type: 'spring', stiffness: 380, damping: 38 }}
-              className="w-full max-w-sm mx-auto bg-white/80 backdrop-blur-xl rounded-t-3xl shadow-2xl px-5 pt-3 pb-8"
+              className="w-full max-w-sm mx-auto bg-[#faf9f5] border-t border-x border-brand-hairline rounded-t-3xl shadow-2xl px-5 pt-3 pb-8"
               style={{ pointerEvents: 'auto' }}
             >
               {/* Drag handle */}
-              <div className="w-10 h-1 bg-black/15 rounded-full mx-auto mb-5" />
+              <div className="w-10 h-1 bg-brand-hairline rounded-full mx-auto mb-5" />
 
               {/* Title */}
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-bold text-black/60 tracking-wide uppercase">
+                <h2 className="text-sm font-bold text-brand-muted tracking-wide uppercase">
                   This Week
                 </h2>
-                <span className="text-xs text-black/35 font-medium">
+                <span className="text-xs text-brand-muted/50 font-medium">
                   {formatMinutes(chartDays.reduce((a, d) => a + d.totalSec, 0))} total
                 </span>
               </div>
@@ -200,7 +200,7 @@ export function DailyTracker() {
               <BarChart days={chartDays} />
 
               {/* Divider */}
-              <div className="h-px bg-black/8 my-4" />
+              <div className="h-px bg-brand-hairline my-4" />
 
               {/* Stats row */}
               <div className="flex gap-2">
@@ -236,8 +236,8 @@ export function DailyTracker() {
             font-semibold text-sm tracking-wide
             transition-colors duration-200 select-none
             ${open
-              ? 'bg-black/85 text-white'
-              : 'bg-white/70 text-black/70 border border-black/10'
+              ? 'bg-brand-coral text-white'
+              : 'bg-[#faf9f5] text-brand-muted border border-brand-hairline'
             }
           `}
         >

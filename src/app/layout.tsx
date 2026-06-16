@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   const tree = (
     <html lang="en" className={`${geist.variable} ${inconsolata.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
+      <body className="min-h-full flex flex-col bg-[#faf9f5] text-foreground transition-colors duration-500">
         <Providers>
           <NavBar />
           {children}

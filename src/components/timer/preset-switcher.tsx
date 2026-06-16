@@ -23,8 +23,8 @@ export function PresetSwitcher() {
             className={clsx(
               'px-3 py-1.5 rounded-full text-sm font-medium transition-all',
               isActive
-                ? 'text-black/90 font-semibold underline underline-offset-4'
-                : 'bg-white/30 text-black/50 hover:bg-white/50 hover:text-black/70',
+                ? 'text-brand-coral font-semibold underline underline-offset-4 decoration-brand-coral'
+                : 'text-brand-muted hover:text-brand-text transition-colors',
               isRunning && 'opacity-50 cursor-not-allowed'
             )}
           >

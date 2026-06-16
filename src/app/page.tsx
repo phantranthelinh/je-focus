@@ -59,7 +59,7 @@ export default function TimerPage() {
         {/* key remounts on text change so the fade-in-up animation replays */}
         <p
           key={statusText}
-          className="animate-fade-in-up text-lg font-medium text-black/60 tracking-wide"
+          className="animate-fade-in-up text-lg font-medium text-brand-muted tracking-wide"
         >
           {statusText}
         </p>

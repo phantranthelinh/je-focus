@@ -71,10 +71,10 @@ export function TimerDisplay({
   })();
 
   return (
-    <div ref={panelRef} className="relative flex flex-col items-center py-3 bg-black/5 rounded-3xl mx-auto w-full max-w-sm backdrop-blur-sm">
+    <div ref={panelRef} className="relative flex flex-col items-center py-3 bg-brand-hairline/40 rounded-3xl mx-auto w-full max-w-sm">
       {/* Timer row: time + settings icon */}
       <div className="relative flex items-center justify-center gap-3 z-10">
-        <span className="text-5xl font-sans font-black tracking-tight text-black/90 leading-none transition-all duration-300">
+        <span className="text-5xl font-sans font-black tracking-tight text-brand-text leading-none transition-all duration-300">
           {formatTime(remainingSeconds)}
         </span>
 
@@ -89,8 +89,8 @@ export function TimerDisplay({
             className={cn(
               'p-1.5 rounded-full transition-all duration-200',
               open
-                ? 'bg-black text-white rotate-45'
-                : 'text-black/30 hover:text-black/70 hover:bg-black/10'
+                ? 'bg-brand-coral text-white rotate-45'
+                : 'text-brand-muted/60 hover:text-brand-muted hover:bg-brand-hairline'
             )}
           >
             <Settings size={18} strokeWidth={2.2} className="transition-transform duration-200" />
@@ -108,10 +108,10 @@ export function TimerDisplay({
             transition={{ duration: 0.18, ease: 'easeOut' }}
             className="mt-4 w-full px-5"
           >
-            <div className="bg-white/80 backdrop-blur-md border border-black/8 rounded-2xl px-5 py-4 shadow-lg space-y-4">
+            <div className="bg-[#faf9f5] border border-brand-hairline rounded-2xl px-5 py-4 shadow-sm space-y-4">
               {/* Slider step display */}
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-semibold text-black/40 uppercase tracking-wider">Thời gian focus</span>
+                <span className="text-xs font-semibold text-brand-muted uppercase tracking-wider">Thời gian focus</span>
                 {/* Direct number input */}
                 <div className="flex items-center gap-1">
                   <input
@@ -137,16 +137,16 @@ export function TimerDisplay({
                       '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
                     )}
                   />
-                  <span className="text-sm font-semibold text-black/40">phút</span>
+                  <span className="text-sm font-semibold text-brand-muted">phút</span>
                 </div>
               </div>
 
               {/* Slider */}
               <div className="relative w-full select-none">
                 {/* Track */}
-                <div className="relative h-2 rounded-full bg-black/10 overflow-hidden">
+                <div className="relative h-2 rounded-full bg-brand-hairline overflow-hidden">
                   <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-black/80 transition-all duration-150"
+                    className="absolute left-0 top-0 h-full rounded-full bg-brand-coral transition-all duration-150"
                     style={{ width: `${(sliderValue / (SLIDER_STEPS.length - 1)) * 100}%` }}
                   />
                 </div>
@@ -180,13 +180,13 @@ export function TimerDisplay({
                     >
                       <div className={cn(
                         'w-1 h-1 rounded-full transition-colors',
-                        i <= sliderValue ? 'bg-black/80' : 'bg-black/20',
-                        !isRunning && 'group-hover:bg-black/50'
+                        i <= sliderValue ? 'bg-brand-coral' : 'bg-brand-hairline',
+                        !isRunning && 'group-hover:bg-brand-coral/60'
                       )} />
                       {(i === 0 || i === SLIDER_STEPS.length - 1 || v === 25 || v === 45) && (
                         <span className={cn(
                           'text-[9px] font-semibold transition-colors',
-                          i <= sliderValue ? 'text-black/60' : 'text-black/25'
+                          i <= sliderValue ? 'text-brand-muted' : 'text-brand-muted/40'
                         )}>
                           {v}
                         </span>

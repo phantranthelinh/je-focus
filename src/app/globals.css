@@ -3,25 +3,32 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-brand-light: #f1f5f9;
-  --color-brand-dark: #000000;
-  --color-brand-text: #000000;
+  --color-brand-light: #f5f0e8;
+  --color-brand-dark: #141413;
+  --color-brand-text: #141413;
+  --color-brand-coral: #cc785c;
+  --color-brand-coral-active: #a9583e;
+  --color-brand-muted: #6c6a64;
+  --color-brand-hairline: #e6dfd8;
+  --color-brand-surface: #efe9de;
   --color-rank-gold: #F59E0B;
   --color-rank-silver: #94A3B8;
   --color-rank-bronze: #B45309;
 }
 
-/* Playful Minimalist Cards */
+/* Warm Editorial Cards */
 .glass {
-  background: #ffffff;
+  background: #faf9f5;
   border-radius: 2.5rem;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.06), 0 8px 24px -8px rgba(20, 20, 19, 0.08);
+  border: 1px solid #e6dfd8;
 }
 
 .glass-strong {
-  background: #ffffff;
+  background: #faf9f5;
   border-radius: 3rem;
-  box-shadow: 0 12px 50px -12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.08), 0 12px 32px -12px rgba(20, 20, 19, 0.10);
+  border: 1px solid #e6dfd8;
 }
 
 /* ── Mascot + status animations (CSS, GPU-composited — no JS runtime) ──
@@ -127,6 +134,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: #faf9f5;
   }
   html {
     @apply font-sans;
@@ -137,7 +145,7 @@
 .tiptap p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: rgba(0, 0, 0, 0.25);
+  color: #8e8b82;
   pointer-events: none;
   height: 0;
 }

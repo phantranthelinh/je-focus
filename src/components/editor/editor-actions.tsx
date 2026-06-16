@@ -42,7 +42,7 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
     // Save placeholder — persistence not implemented yet
   };
 
-  const btnClass = 'flex items-center justify-center w-9 h-9 rounded-full bg-white/60 backdrop-blur text-black/40 hover:text-black/70 hover:bg-white/80 transition-all shadow-sm';
+  const btnClass = 'flex items-center justify-center w-9 h-9 rounded-full bg-[#faf9f5] border border-brand-hairline text-brand-muted/60 hover:text-brand-muted hover:bg-brand-light transition-all shadow-sm';
 
   return (
     <>
@@ -80,7 +80,7 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
 
       {/* Bottom-right word count */}
       <div className="fixed bottom-6 right-6 z-40">
-        <span className="text-sm text-black/30 tabular-nums font-[family-name:var(--font-inconsolata)]">
+        <span className="text-sm text-brand-muted/50 tabular-nums font-[family-name:var(--font-inconsolata)]">
           {wordCount} {wordCount === 1 ? 'word' : 'words'}
         </span>
       </div>
