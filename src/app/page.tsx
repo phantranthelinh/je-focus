@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { TimerDisplay } from '@/components/timer/timer-display';
 import { TimerControls } from '@/components/timer/timer-controls';
+import { PresetSwitcher } from '@/components/timer/preset-switcher';
 import { Mascot } from '@/components/timer/mascot';
 import { DailyTracker } from '@/components/timer/daily-tracker';
 import { useTimer } from '@/hooks/use-timer';
@@ -67,6 +68,8 @@ export default function TimerPage() {
           remainingSeconds={remainingSeconds}
           mode={mode}
         />
+
+        <PresetSwitcher />
 
         {/* Controls */}
         <TimerControls
