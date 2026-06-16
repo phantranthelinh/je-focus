@@ -6,7 +6,7 @@ import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 import { useClerkSafe } from '@/lib/clerk-hooks';
 import { clsx } from 'clsx';
 import { trpc } from '@/lib/trpc-client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Props = {
   editor: Editor | null;
@@ -48,6 +48,17 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
     a.click();
     URL.revokeObjectURL(url);
   };
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  });
 
   const handleSave = () => {
     if (!editor) return;
