@@ -7,7 +7,7 @@ import { useTrackingStore } from '@/stores/tracking-store';
 
 export function useAuthMigration() {
   const { userId } = useAuth();
-  const prevUserId = useRef<string | null | undefined>(undefined);
+  const prevUserId = useRef<string | null | undefined>(null);
   const migrateMutation = trpc.timer.migrateSessions.useMutation();
 
   useEffect(() => {
