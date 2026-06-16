@@ -7,7 +7,7 @@ import CharacterCount from '@tiptap/extension-character-count';
 import { Heading1, Heading2 } from 'lucide-react';
 import { EditorActions } from './editor-actions';
 import { clsx } from 'clsx';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const DEFAULT_CONTENT = `<p>Hello, I am the JeFocus distraction-free text editor.</p><p>Here you can write plain text without distractions.</p><p>I support Markdown syntax and I will save your text automatically to your profile. However, since I am still in beta, please consider saving your text regularly by using the download function on the right.</p><p>Have a relaxing, distraction-free time with your writing :)</p>`;
 
@@ -16,6 +16,9 @@ const EDITOR_CLASS = 'outline-none min-h-[60vh] prose prose-neutral max-w-none t
 export function TextEditor() {
   const [showMenu, setShowMenu] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isEditorFocused, setIsEditorFocused] = useState(false);
+  const zenRef = useRef(false);
 
   const editor = useEditor({
     extensions: [
@@ -29,8 +32,18 @@ export function TextEditor() {
       attributes: { class: EDITOR_CLASS },
     },
     onSelectionUpdate: () => setShowMenu(true),
-    onBlur: () => setShowMenu(false),
+    onFocus: () => setIsEditorFocused(true),
+    onBlur: () => { setShowMenu(false); setIsEditorFocused(false); },
   });
+
+  useEffect(() => {
+    const zen = isHovered || isEditorFocused;
+    if (zen !== zenRef.current) {
+      zenRef.current = zen;
+      document.body.classList.toggle('editor-zen', zen);
+    }
+    return () => { document.body.classList.remove('editor-zen'); };
+  }, [isHovered, isEditorFocused]);
 
   return (
     <>
@@ -81,7 +94,11 @@ export function TextEditor() {
         </div>
       )}
 
-      <div className="max-w-[690px] mx-auto px-8 py-12">
+      <div
+        className="max-w-[690px] mx-auto px-8 py-12"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {isPreview ? (
           <div
             className={EDITOR_CLASS}

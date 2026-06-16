@@ -47,11 +47,20 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
   return (
     <>
       {/* Top-right icons */}
-      <div className="fixed top-20 right-6 flex items-center gap-2 z-40">
+      <div data-editor-ui className="fixed top-20 right-6 flex items-center gap-2 z-40">
+        {/* Download */}
+        <button
+          onClick={handleDownload}
+          className={btnClass}
+          aria-label="Download as text"
+        >
+          <Download size={16} />
+        </button>
+
         {/* Preview toggle */}
         <button
           onClick={onTogglePreview}
-          className={clsx(btnClass, isPreview && 'text-black/70 bg-white/80')}
+          className={clsx(btnClass, isPreview && 'text-brand-text bg-brand-light')}
           aria-label={isPreview ? 'Edit' : 'Preview'}
         >
           {isPreview ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -67,19 +76,10 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
         >
           <Check size={16} />
         </button>
-
-        {/* Download */}
-        <button
-          onClick={handleDownload}
-          className={btnClass}
-          aria-label="Download as text"
-        >
-          <Download size={16} />
-        </button>
       </div>
 
       {/* Bottom-right word count */}
-      <div className="fixed bottom-6 right-6 z-40">
+      <div data-editor-ui className="fixed bottom-6 right-6 z-40">
         <span className="text-sm text-brand-muted/50 tabular-nums font-[family-name:var(--font-inconsolata)]">
           {wordCount} {wordCount === 1 ? 'word' : 'words'}
         </span>

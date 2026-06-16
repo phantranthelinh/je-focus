@@ -141,6 +141,17 @@
   }
 }
 
+/* Editor zen mode — fade nav + action UI when writing */
+nav,
+[data-editor-ui] {
+  transition: opacity 0.35s ease;
+}
+.editor-zen nav,
+.editor-zen [data-editor-ui] {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* TipTap placeholder */
 .tiptap p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
