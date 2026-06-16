@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Timer, BarChart3, PenLine } from 'lucide-react';
+import { Timer, BarChart3, PenLine, Trophy } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { useUserSafe, useClerkSafe } from '@/lib/clerk-hooks';
 import { clerkEnabled } from '@/lib/clerk-config';
@@ -19,6 +19,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/', label: 'Timer', icon: <Timer size={20} /> },
   { href: '/dashboard', label: 'Stats', icon: <BarChart3 size={20} /> },
+  { href: '/leaderboard', label: 'Board', icon: <Trophy size={20} /> },
   { href: '/text-editor', label: 'Write', icon: <PenLine size={20} /> },
 ];
 
