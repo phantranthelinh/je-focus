@@ -28,7 +28,7 @@ export function NavBar() {
   const { openSignIn } = useClerkSafe();
 
   return (
-    <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
+    <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between !rounded-none">
       <Link href="/" className="text-xl font-bold text-brand-text">
         JeFocus
       </Link>
