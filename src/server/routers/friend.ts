@@ -69,6 +69,14 @@ export const friendRouter = router({
     });
   }),
 
+  sentRequests: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.friendship.findMany({
+      where: { userId: ctx.userId, status: 'pending' },
+      include: { friend: { select: { id: true, name: true, email: true, image: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }),
+
   list: protectedProcedure.query(async ({ ctx }) => {
     const friendships = await ctx.prisma.friendship.findMany({
       where: {

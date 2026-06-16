@@ -117,10 +117,12 @@ function FriendsPanel() {
     );
 
   const { data: pending } = trpc.friend.pendingRequests.useQuery();
+  const { data: sent } = trpc.friend.sentRequests.useQuery();
 
   const sendRequest = trpc.friend.sendRequest.useMutation({
     onSuccess: () => {
       utils.friend.search.invalidate();
+      utils.friend.sentRequests.invalidate();
       toast.success('Friend request sent!');
     },
     onError: () => toast.error('Could not send friend request'),
@@ -136,6 +138,13 @@ function FriendsPanel() {
   const decline = trpc.friend.decline.useMutation({
     onSuccess: () => utils.friend.pendingRequests.invalidate(),
     onError: () => toast.error('Could not decline request'),
+  });
+  const cancel = trpc.friend.decline.useMutation({
+    onSuccess: () => {
+      utils.friend.sentRequests.invalidate();
+      utils.friend.search.invalidate();
+    },
+    onError: () => toast.error('Could not cancel request'),
   });
 
   const { data: friends, isLoading: friendsLoading } = trpc.friend.list.useQuery();
@@ -209,6 +218,31 @@ function FriendsPanel() {
           </div>
         )}
       </div>
+
+      {/* Sent requests */}
+      {sent && sent.length > 0 && (
+        <div>
+          <h3 className="text-sm font-medium text-brand-text mb-2">Sent requests</h3>
+          <div className="divide-y divide-brand-hairline rounded-lg border border-brand-hairline overflow-hidden">
+            {sent.map((req) => (
+              <div key={req.id} className="flex items-center gap-3 p-3 bg-white">
+                <Avatar name={req.friend.name ?? 'User'} image={req.friend.image ?? null} size={32} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-brand-text truncate">{req.friend.name ?? 'Unnamed user'}</p>
+                  <p className="text-xs text-brand-muted truncate">{req.friend.email}</p>
+                </div>
+                <button
+                  onClick={() => cancel.mutate({ friendshipId: req.id })}
+                  disabled={cancel.isPending}
+                  className="text-xs text-brand-muted hover:text-red-500 transition-colors disabled:opacity-40"
+                >
+                  Cancel
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Pending requests */}
       {pending && pending.length > 0 && (
