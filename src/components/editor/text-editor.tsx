@@ -40,7 +40,7 @@ export function TextEditor() {
       />
 
       {editor && showMenu && !isPreview && (
-        <div className="fixed left-1/2 -translate-x-1/2 top-24 flex items-center gap-0.5 bg-[#faf9f5] shadow-md rounded-xl p-1 border border-brand-hairline z-50 animate-fade-in-up">
+        <div className="fixed left-1/2 -translate-x-1/2 top-24 flex items-center gap-0.5 bg-[#ffffff] shadow-md rounded-xl p-1 border border-brand-hairline z-50 animate-fade-in-up">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={clsx(

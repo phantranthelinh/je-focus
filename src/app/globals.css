@@ -3,32 +3,32 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-brand-light: #f5f0e8;
-  --color-brand-dark: #141413;
-  --color-brand-text: #141413;
-  --color-brand-coral: #cc785c;
-  --color-brand-coral-active: #a9583e;
-  --color-brand-muted: #6c6a64;
-  --color-brand-hairline: #e6dfd8;
-  --color-brand-surface: #efe9de;
+  --color-brand-light: #f7f7f7;
+  --color-brand-dark: #0a0a0a;
+  --color-brand-text: #0a0a0a;
+  --color-brand-coral: #00d4a4;
+  --color-brand-coral-active: #00b48a;
+  --color-brand-muted: #888888;
+  --color-brand-hairline: #e5e5e5;
+  --color-brand-surface: #f7f7f7;
   --color-rank-gold: #F59E0B;
   --color-rank-silver: #94A3B8;
   --color-rank-bronze: #B45309;
 }
 
-/* Warm Editorial Cards */
+/* Mintlify-style Cards */
 .glass {
-  background: #faf9f5;
+  background: #ffffff;
   border-radius: 2.5rem;
-  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.06), 0 8px 24px -8px rgba(20, 20, 19, 0.08);
-  border: 1px solid #e6dfd8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e5e5;
 }
 
 .glass-strong {
-  background: #faf9f5;
+  background: #ffffff;
   border-radius: 3rem;
-  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.08), 0 12px 32px -12px rgba(20, 20, 19, 0.10);
-  border: 1px solid #e6dfd8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e5e5;
 }
 
 /* ── Mascot + status animations (CSS, GPU-composited — no JS runtime) ──
@@ -134,7 +134,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #faf9f5;
+    background-color: #fafafa;
   }
   html {
     @apply font-sans;
@@ -145,7 +145,7 @@
 .tiptap p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: #8e8b82;
+  color: #a8a8aa;
   pointer-events: none;
   height: 0;
 }

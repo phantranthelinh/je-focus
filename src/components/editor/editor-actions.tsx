@@ -42,7 +42,7 @@ export function EditorActions({ editor, isPreview, onTogglePreview }: Props) {
     // Save placeholder — persistence not implemented yet
   };
 
-  const btnClass = 'flex items-center justify-center w-9 h-9 rounded-full bg-[#faf9f5] border border-brand-hairline text-brand-muted/60 hover:text-brand-muted hover:bg-brand-light transition-all shadow-sm';
+  const btnClass = 'flex items-center justify-center w-9 h-9 rounded-full bg-[#ffffff] border border-brand-hairline text-brand-muted/60 hover:text-brand-muted hover:bg-brand-light transition-all shadow-sm';
 
   return (
     <>

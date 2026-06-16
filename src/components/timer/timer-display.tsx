@@ -108,7 +108,7 @@ export function TimerDisplay({
             transition={{ duration: 0.18, ease: 'easeOut' }}
             className="mt-4 w-full px-5"
           >
-            <div className="bg-[#faf9f5] border border-brand-hairline rounded-2xl px-5 py-4 shadow-sm space-y-4">
+            <div className="bg-[#ffffff] border border-brand-hairline rounded-2xl px-5 py-4 shadow-sm space-y-4">
               {/* Slider step display */}
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-semibold text-brand-muted uppercase tracking-wider">Thời gian focus</span>

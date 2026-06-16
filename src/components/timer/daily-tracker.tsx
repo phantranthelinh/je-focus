@@ -180,7 +180,7 @@ export function DailyTracker() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: '100%', opacity: 0 }}
               transition={{ type: 'spring', stiffness: 380, damping: 38 }}
-              className="w-full max-w-sm mx-auto bg-[#faf9f5] border-t border-x border-brand-hairline rounded-t-3xl shadow-2xl px-5 pt-3 pb-8"
+              className="w-full max-w-sm mx-auto bg-[#ffffff] border-t border-x border-brand-hairline rounded-t-3xl shadow-2xl px-5 pt-3 pb-8"
               style={{ pointerEvents: 'auto' }}
             >
               {/* Drag handle */}
@@ -237,7 +237,7 @@ export function DailyTracker() {
             transition-colors duration-200 select-none
             ${open
               ? 'bg-brand-coral text-white'
-              : 'bg-[#faf9f5] text-brand-muted border border-brand-hairline'
+              : 'bg-[#ffffff] text-brand-muted border border-brand-hairline'
             }
           `}
         >
