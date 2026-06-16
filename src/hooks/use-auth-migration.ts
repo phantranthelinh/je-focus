@@ -7,10 +7,12 @@ import { useTrackingStore } from '@/stores/tracking-store';
 
 export function useAuthMigration() {
   const { userId } = useAuth();
-  const prevUserId = useRef<string | null | undefined>(null);
-  const migrateMutation = trpc.timer.migrateSessions.useMutation();
+  const prevUserId = useRef<string | null | undefined>(undefined);
+  const { mutate: migrate } = trpc.timer.migrateSessions.useMutation();
 
   useEffect(() => {
+    if (userId === undefined) return; // Clerk still loading
+
     const wasSignedOut = !prevUserId.current;
     const isNowSignedIn = !!userId;
 
@@ -29,12 +31,13 @@ export function useAuthMigration() {
           totalFocusSec: record.totalSec,
         }));
 
+      const datesToClear = sessions.map((s) => s.date);
       if (sessions.length > 0) {
-        migrateMutation.mutate(
+        migrate(
           { sessions },
           {
             onSuccess: () => {
-              useTrackingStore.getState().clearAll();
+              useTrackingStore.getState().clearDates(datesToClear);
               localStorage.setItem(migrationKey, '1');
             },
           }
@@ -45,5 +48,5 @@ export function useAuthMigration() {
     }
 
     prevUserId.current = userId;
-  }, [userId, migrateMutation]);
+  }, [userId, migrate]);
 }

@@ -48,6 +48,7 @@ export function SoundPopover() {
     onMutate: ({ id }) => setDeletingId(id),
     onSettled: () => setDeletingId(null),
     onSuccess: () => utils.sound.getMixes.invalidate(),
+    onError: () => utils.sound.getMixes.invalidate(),
   });
 
   const handleSaveMix = () => {

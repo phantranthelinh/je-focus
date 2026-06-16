@@ -20,6 +20,8 @@ type TrackingActions = {
   getRecentDays: (n: number) => Array<{ date: string } & DayRecord>;
   /** Clears all tracked session data (used on migration to server) */
   clearAll: () => void;
+  /** Clears only the specified dates (used after partial migration) */
+  clearDates: (dates: string[]) => void;
 };
 
 function todayKey(): string {
@@ -70,6 +72,13 @@ export const useTrackingStore = create<TrackingState & TrackingActions>()(
       },
 
       clearAll: () => set({ dailyLog: {} }),
+
+      clearDates: (dates) =>
+        set((state) => {
+          const log = { ...state.dailyLog };
+          for (const d of dates) delete log[d];
+          return { dailyLog: log };
+        }),
     }),
     {
       name: 'jefocus-tracking',

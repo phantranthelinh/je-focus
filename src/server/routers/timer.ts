@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { router, protectedProcedure } from '../trpc';
 
 export const timerRouter = router({
@@ -161,6 +162,9 @@ export const timerRouter = router({
       const rows = input.sessions.map(({ date, totalFocusSec }) => {
         const [y, m, d] = date.split('-').map(Number);
         const completedAt = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+        if (isNaN(completedAt.getTime())) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: `Invalid date: ${date}` });
+        }
         return {
           userId: ctx.userId,
           preset: 'migrated',
@@ -172,11 +176,11 @@ export const timerRouter = router({
         };
       });
 
-      await ctx.prisma.timerSession.createMany({
+      const result = await ctx.prisma.timerSession.createMany({
         data: rows,
         skipDuplicates: true,
       });
 
-      return { migrated: rows.length };
+      return { migrated: result.count };
     }),
 });
