@@ -23,7 +23,7 @@ export function PresetSwitcher() {
             className={clsx(
               'px-3 py-1.5 rounded-full text-sm font-medium transition-all',
               isActive
-                ? 'bg-green-300/60 text-black/80 shadow-sm'
+                ? 'text-black/90 font-semibold underline underline-offset-4'
                 : 'bg-white/30 text-black/50 hover:bg-white/50 hover:text-black/70',
               isRunning && 'opacity-50 cursor-not-allowed'
             )}
