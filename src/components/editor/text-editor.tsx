@@ -12,12 +12,15 @@ import { useState } from 'react';
 export function TextEditor() {
   const [showMenu, setShowMenu] = useState(false);
 
+  const defaultContent = `<p>Hello, I am the JeFocus distraction-free text editor.</p><p>Here you can write plain text without distractions.</p><p>I support Markdown syntax and I will save your text automatically to your profile. However, since I am still in beta, please consider saving your text regularly by using the download function on the right.</p><p>Have a relaxing, distraction-free time with your writing :)</p>`;
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({ placeholder: 'Start writing…' }),
       CharacterCount,
     ],
+    content: defaultContent,
     editorProps: {
       attributes: {
         class: 'outline-none min-h-[60vh] prose prose-neutral max-w-none text-brand-text leading-relaxed',
