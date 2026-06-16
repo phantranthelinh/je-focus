@@ -80,7 +80,7 @@ export function TextEditor() {
         </div>
       )}
 
-      <div className="max-w-[1080px] mx-auto px-8 py-12">
+      <div className="max-w-[690px] mx-auto px-8 py-12">
         {isPreview ? (
           <div
             className={EDITOR_CLASS}
