@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Inconsolata } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { NavBar } from "@/components/ui/nav-bar";
@@ -9,6 +9,11 @@ import { AudioUnlockPrompt } from "@/components/audio/AudioUnlockPrompt";
 
 const geist = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const inconsolata = Inconsolata({
+  variable: "--font-inconsolata",
   subsets: ["latin"],
 });
 
@@ -24,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const tree = (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} ${inconsolata.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
         <Providers>
           <NavBar />

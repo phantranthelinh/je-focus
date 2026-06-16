@@ -23,7 +23,7 @@ export function TextEditor() {
     content: defaultContent,
     editorProps: {
       attributes: {
-        class: 'outline-none min-h-[60vh] prose prose-neutral max-w-none text-brand-text leading-relaxed',
+        class: 'outline-none min-h-[60vh] prose prose-neutral max-w-none text-brand-text leading-relaxed font-[family-name:var(--font-inconsolata)]',
       },
     },
     onSelectionUpdate: () => setShowMenu(true),
