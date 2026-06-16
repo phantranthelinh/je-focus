@@ -25,24 +25,29 @@ export function SoundPopover() {
     toggleMute,
   } = useAudioMixer();
 
+  const utils = trpc.useUtils();
+
   const { isSignedIn } = useAuth();
   const loadMix = useAudioStore((s) => s.loadMix);
 
   const [mixName, setMixName] = useState('');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: mixes, refetch: refetchMixes } = trpc.sound.getMixes.useQuery(undefined, {
+  const { data: mixes } = trpc.sound.getMixes.useQuery(undefined, {
     enabled: !!isSignedIn && open,
   });
 
   const saveMixMutation = trpc.sound.saveMix.useMutation({
     onSuccess: () => {
       setMixName('');
-      refetchMixes();
+      utils.sound.getMixes.invalidate();
     },
   });
 
   const deleteMixMutation = trpc.sound.deleteMix.useMutation({
-    onSuccess: () => refetchMixes(),
+    onMutate: ({ id }) => setDeletingId(id),
+    onSettled: () => setDeletingId(null),
+    onSuccess: () => utils.sound.getMixes.invalidate(),
   });
 
   const handleSaveMix = () => {
@@ -186,7 +191,7 @@ export function SoundPopover() {
               </div>
 
               {/* Saved mixes list */}
-              {mixes && mixes.length > 0 ? (
+              {mixes === undefined ? null : mixes.length > 0 ? (
                 <ul className="space-y-1">
                   {mixes.slice(0, 5).map((mix) => (
                     <li key={mix.id} className="flex items-center gap-2">
@@ -198,7 +203,7 @@ export function SoundPopover() {
                       </button>
                       <button
                         onClick={() => deleteMixMutation.mutate({ id: mix.id })}
-                        disabled={deleteMixMutation.isPending}
+                        disabled={deletingId === mix.id}
                         className="shrink-0 p-1 rounded-lg text-black/30 hover:text-red-400 transition-colors"
                         aria-label={`Delete ${mix.name}`}
                       >
