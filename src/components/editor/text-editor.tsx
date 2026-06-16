@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
-import { Bold, Italic, Heading1, Heading2 } from 'lucide-react';
+import { Heading1, Heading2 } from 'lucide-react';
 import { EditorActions } from './editor-actions';
 import { clsx } from 'clsx';
 import { useState } from 'react';

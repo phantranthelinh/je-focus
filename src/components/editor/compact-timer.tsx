@@ -1,7 +1,6 @@
 'use client';
 
 import { useTimer } from '@/hooks/use-timer';
-import { useTimerStore } from '@/stores/timer-store';
 import { useNotification } from '@/hooks/use-notification';
 import { useEffect } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
