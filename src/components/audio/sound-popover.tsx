@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, Save, Trash2 } from 'lucide-react';
+import { useAuth } from '@clerk/nextjs';
 import { SoundToggle } from './sound-toggle';
 import { VolumeSlider } from './volume-slider';
 import { useAudioMixer } from '@/hooks/use-audio-mixer';
+import { useAudioStore } from '@/stores/audio-store';
 import { audioEngine } from '@/lib/audio-engine';
 import { AMBIENT_SOUNDS } from '@/lib/sounds';
+import { trpc } from '@/lib/trpc-client';
 
 export function SoundPopover() {
   const [open, setOpen] = useState(false);
@@ -21,6 +24,45 @@ export function SoundPopover() {
     setMasterVolume,
     toggleMute,
   } = useAudioMixer();
+
+  const { isSignedIn } = useAuth();
+  const loadMix = useAudioStore((s) => s.loadMix);
+
+  const [mixName, setMixName] = useState('');
+
+  const { data: mixes, refetch: refetchMixes } = trpc.sound.getMixes.useQuery(undefined, {
+    enabled: !!isSignedIn && open,
+  });
+
+  const saveMixMutation = trpc.sound.saveMix.useMutation({
+    onSuccess: () => {
+      setMixName('');
+      refetchMixes();
+    },
+  });
+
+  const deleteMixMutation = trpc.sound.deleteMix.useMutation({
+    onSuccess: () => refetchMixes(),
+  });
+
+  const handleSaveMix = () => {
+    const name = mixName.trim();
+    if (!name) return;
+    const channelsToSave = Object.values(channels).map((ch) => ({
+      soundKey: ch.id,
+      volume: ch.volume,
+      enabled: ch.enabled,
+    }));
+    saveMixMutation.mutate({ name, channels: channelsToSave });
+  };
+
+  const handleLoadMix = (mix: NonNullable<typeof mixes>[number]) => {
+    loadMix(mix.channels.map((ch) => ({
+      id: ch.soundKey,
+      volume: ch.volume,
+      enabled: ch.enabled,
+    })));
+  };
 
   const enabledCount = Object.values(channels).filter((ch) => ch.enabled).length;
 
@@ -115,6 +157,63 @@ export function SoundPopover() {
               />
             ))}
           </div>
+
+          {/* Sound Presets */}
+          <hr className="border-black/10 my-3" />
+          {isSignedIn ? (
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-black/50 uppercase tracking-wide">Presets</p>
+
+              {/* Save current mix */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={mixName}
+                  onChange={(e) => setMixName(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSaveMix()}
+                  placeholder="Mix name…"
+                  maxLength={80}
+                  className="flex-1 min-w-0 px-2 py-1 text-sm rounded-lg bg-white/40 border border-black/10 outline-none placeholder:text-black/30"
+                />
+                <button
+                  onClick={handleSaveMix}
+                  disabled={!mixName.trim() || saveMixMutation.isPending}
+                  className="shrink-0 flex items-center gap-1 px-2 py-1 text-sm rounded-lg bg-green-300/60 text-black/70 hover:bg-green-300/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  aria-label="Save mix"
+                >
+                  <Save size={14} />
+                </button>
+              </div>
+
+              {/* Saved mixes list */}
+              {mixes && mixes.length > 0 ? (
+                <ul className="space-y-1">
+                  {mixes.slice(0, 5).map((mix) => (
+                    <li key={mix.id} className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleLoadMix(mix)}
+                        className="flex-1 min-w-0 text-left text-sm px-2 py-1 rounded-lg bg-white/30 hover:bg-white/50 text-black/70 truncate transition-all"
+                      >
+                        {mix.name}
+                      </button>
+                      <button
+                        onClick={() => deleteMixMutation.mutate({ id: mix.id })}
+                        disabled={deleteMixMutation.isPending}
+                        className="shrink-0 p-1 rounded-lg text-black/30 hover:text-red-400 transition-colors"
+                        aria-label={`Delete ${mix.name}`}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-black/40 italic">No saved mixes yet</p>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs text-black/40 text-center">Sign in to save mixes</p>
+          )}
         </div>
       )}
     </div>
