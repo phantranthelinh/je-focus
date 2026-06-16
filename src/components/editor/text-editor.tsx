@@ -6,6 +6,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import { EditorActions } from './editor-actions';
 import { useState, useEffect, useRef } from 'react';
+import { trpc } from '@/lib/trpc-client';
+import { useAuthSafe as useAuth } from '@/lib/clerk-hooks';
 
 const DEFAULT_CONTENT = `<p>Hello, I am the JeFocus distraction-free text editor.</p><p>Here you can write plain text without distractions.</p><p>I support Markdown syntax and I will save your text automatically to your profile. However, since I am still in beta, please consider saving your text regularly by using the download function on the right.</p><p>Have a relaxing, distraction-free time with your writing :)</p>`;
 
@@ -16,6 +18,12 @@ export function TextEditor() {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditorFocused, setIsEditorFocused] = useState(false);
   const zenRef = useRef(false);
+  const contentLoadedRef = useRef(false);
+
+  const { isSignedIn } = useAuth();
+  const { data: savedNote } = trpc.note.get.useQuery(undefined, {
+    enabled: !!isSignedIn,
+  });
 
   const editor = useEditor({
     extensions: [
@@ -31,6 +39,13 @@ export function TextEditor() {
     onFocus: () => setIsEditorFocused(true),
     onBlur: () => setIsEditorFocused(false),
   });
+
+  // Restore saved note once editor + data are both ready
+  useEffect(() => {
+    if (!editor || !savedNote?.content || contentLoadedRef.current) return;
+    contentLoadedRef.current = true;
+    editor.commands.setContent(savedNote.content);
+  }, [editor, savedNote]);
 
   useEffect(() => {
     const zen = isHovered || isEditorFocused;
