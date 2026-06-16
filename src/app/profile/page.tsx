@@ -24,8 +24,8 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (profile?.name) setName(profile.name);
-  }, [profile?.name]);
+    if (profile !== undefined) setName(profile?.name ?? '');
+  }, [profile]);
 
   const handleSave = () => {
     const trimmed = name.trim();
@@ -111,7 +111,7 @@ export default function ProfilePage() {
               className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-brand-coral text-white hover:bg-brand-coral-active disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {updateMutation.isPending ? (
-                <Loader2 size={14} className="animate-spin" />
+                <><Loader2 size={14} className="animate-spin" /><span>Saving</span></>
               ) : saved ? (
                 <Check size={14} />
               ) : (
