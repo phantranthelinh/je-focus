@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Timer, BarChart3, PenLine, Trophy, Download } from 'lucide-react';
+import { Timer, BarChart3, PenLine, Trophy, Download, User } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { useUserSafe, useClerkSafe } from '@/lib/clerk-hooks';
 import { clerkEnabled } from '@/lib/clerk-config';
@@ -71,7 +71,21 @@ export function NavBar() {
         )}
         <SoundPopover />
         {clerkEnabled && isSignedIn ? (
-          <UserButton />
+          <div className="flex items-center gap-1">
+            <Link
+              href="/profile"
+              className={cn(
+                'flex items-center justify-center w-9 h-9 rounded-full transition-all',
+                pathname === '/profile'
+                  ? 'glass-strong text-brand-text'
+                  : 'text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30'
+              )}
+              title="Profile"
+            >
+              <User size={18} />
+            </Link>
+            <UserButton />
+          </div>
         ) : (
           <button
             onClick={() => openSignIn()}
